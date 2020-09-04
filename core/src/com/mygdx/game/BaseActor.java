@@ -1,4 +1,6 @@
 package com.mygdx.game;
+
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,7 +41,7 @@ public class BaseActor extends Actor {
 
     public void act(float dt) {
         super.act(dt);
-        moveBy(velocityX * dt,velocityY*dt);
+        moveBy(velocityX * dt, velocityY * dt);
     }
 
     public void draw(Batch batch, float parentAlpha) {
@@ -49,4 +51,13 @@ public class BaseActor extends Actor {
             batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         }
     }
+
+    private void createTexture(int width, int height, Color color) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(color);
+        pixmap.fillRectangle((int) this.getX(), (int) this.getY(), width, height);
+        this.setTexture(new Texture(pixmap));
+        pixmap.dispose();
+    }
+
 }
