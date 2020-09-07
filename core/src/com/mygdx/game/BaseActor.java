@@ -13,6 +13,7 @@ public class BaseActor extends Actor {
     public Rectangle boundary;
     public float velocityX;
     public float velocityY;
+    private long deltaCounter;
 
     public BaseActor() {
         super();
@@ -52,7 +53,15 @@ public class BaseActor extends Actor {
         }
     }
 
-    private void createTexture(int width, int height, Color color) {
+    public void setDeltaCounter(long deltaCounter ){
+        this.deltaCounter = deltaCounter;
+    }
+
+    public long getDeltaCounter(){
+        return deltaCounter;
+    }
+
+    protected void createTexture(int width, int height, Color color) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
         pixmap.fillRectangle((int) this.getX(), (int) this.getY(), width, height);

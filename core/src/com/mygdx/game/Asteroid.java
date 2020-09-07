@@ -16,7 +16,7 @@ public class Asteroid extends BaseActor {
         this.setPosition(x, y);
         this.setTexture(texture);
         this.asteroidType = asteroidType;
-
+        this.setOrigin(this.getWidth() / 2, this.getHeight() / 2);
         this.velocityX = velocityX;
         this.velocityY = velocityY;
 
@@ -30,15 +30,20 @@ public class Asteroid extends BaseActor {
             hit = true;
             this.remove();
             if (asteroidType.equals("big")) {
-                Asteroid mediumAsteroid1 = new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("mediumAsteroid.png")), "medium");
-                Asteroid mediumAsteroid2 = new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("mediumAsteroid.png")), "medium");
-                Asteroid mediumAsteroid3 = new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("mediumAsteroid.png")), "medium");
+                 new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("mediumAsteroid.png")), "medium");
+                 new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("mediumAsteroid.png")), "medium");
+                 new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("mediumAsteroid.png")), "medium");
             } else if (asteroidType.equals("medium")) {
-                Asteroid smallAsteroid1 = new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("smallAsteroid.png")), "small");
-                Asteroid smallAsteroid2 = new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("smallAsteroid.png")), "small");
-                Asteroid smallAsteroid3 = new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("smallAsteroid.png")), "small");
+                 new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("smallAsteroid.png")), "small");
+                 new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("smallAsteroid.png")), "small");
+                 new Asteroid(this.getX() + this.getWidth() / 2, this.getY() + this.getHeight() / 2, rn.nextInt(50) + 30, rn.nextInt(50) + 30, new Texture(Gdx.files.internal("smallAsteroid.png")), "small");
             }
         }
+    }
+
+
+    public String getAsteroidType() {
+        return asteroidType;
     }
 
 

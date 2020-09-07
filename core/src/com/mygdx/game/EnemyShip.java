@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
@@ -13,6 +14,7 @@ public class EnemyShip extends BaseActor {
     private float originalWidth;
     private float originalHeight;
     private float timeSinceHit = 0;
+    private long idOfExplosionSound;
 
     public EnemyShip() {
         super();
@@ -87,10 +89,23 @@ public class EnemyShip extends BaseActor {
         hit = true;
     }
 
-    public void explode() {
+    public void explode(Sound explosionSound) {
+        if (timeSinceHit == 0) {
+            idOfExplosionSound = explosionSound.play(1F);
+        }
+
         timeSinceHit += Gdx.graphics.getDeltaTime();
-        if (timeSinceHit < 4F) {
-            this.addAction(Actions.alpha((4F - timeSinceHit) / 4F));
+        setDeltaCounter(getDeltaCounter() + 1);
+        if (timeSinceHit < 2F) {
+            if (getDeltaCounter() % 2 == 0) {
+                if (timeSinceHit < 2) {
+                    this.setHeight(this.getHeight() + 1);
+                    this.setWidth(this.getWidth() + 1);
+                    this.setPosition(getX()-0.5F, getY()-0.5F);
+                }
+            }
+            explosionSound.setVolume(idOfExplosionSound, (2F - timeSinceHit) / 2F);
+            this.addAction(Actions.alpha((2F - timeSinceHit) / 2F));
         } else {
             this.remove();
             AsteroidsGame.listOfExistingEnemyShips.remove(this);
