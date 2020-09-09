@@ -21,7 +21,10 @@ public class AsteroidsGame extends Game {
     public static Stage mainStage;
 
     private PlayerShip spaceShip;
+
     private BaseActor gameOverSign;
+    private BaseActor pressEnterToPlayAgainSign;
+
     private BaseActor firstIndexScoreActor;
     private BaseActor secondIndexScoreActor;
     private BaseActor thirdIndexScoreActor;
@@ -53,6 +56,10 @@ public class AsteroidsGame extends Game {
     float distanceFromCanonY;
     float canonAngle;
 
+    float timeSinceStart = 0F;
+    float timeSinceLastAsteroidGenerated = 0F;
+    float timeSinceLastEnemyShipGenerated = 0F;
+    float difficulty = 5.0F;
     long timeWhenLastShot;
     int thrusterCounter = 0;
     boolean isThrusterOn;
@@ -158,6 +165,12 @@ public class AsteroidsGame extends Game {
         fifthIndexScoreActor.setPosition(fourthIndexScoreActor.getX() - fifthIndexScoreActor.getWidth() - fifthIndexScoreActor.getWidth() / 3, mainStage.getHeight() - fifthIndexScoreActor.getHeight());
         mainStage.addActor(fifthIndexScoreActor);
 
+        pressEnterToPlayAgainSign = new BaseActor();
+        pressEnterToPlayAgainSign.setTexture(new Texture(Gdx.files.internal("pressEnterToPlayAgain.png")));
+        pressEnterToPlayAgainSign.setVisible(false);
+        mainStage.addActor(pressEnterToPlayAgainSign);
+
+
         mapOfIndexesWithScore.put(firstIndexScoreActor, firstIndexScore);
         mapOfIndexesWithScore.put(secondIndexScoreActor, secondIndexScore);
         mapOfIndexesWithScore.put(thirdIndexScoreActor, thirdIndexScore);
@@ -182,7 +195,7 @@ public class AsteroidsGame extends Game {
                            @Override
                            public void run() {
 
-                               generateAsteroids();
+                               //generateAsteroids();
 
                            }
                        }
@@ -222,6 +235,18 @@ public class AsteroidsGame extends Game {
 
     @Override
     public void render() {
+        timeSinceStart += Gdx.graphics.getDeltaTime();
+        difficulty = Math.abs((timeSinceStart - 180F) / 30F);
+        System.out.println(difficulty);
+        if (timeSinceStart > 3) {
+            if (timeSinceLastAsteroidGenerated > difficulty) {
+                generateAsteroids();
+                generateAsteroids();
+                generateAsteroids();
+            } else {
+                timeSinceLastAsteroidGenerated += Gdx.graphics.getDeltaTime();
+            }
+        }
 
         if (!spaceShip.isHit()) {
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -239,6 +264,7 @@ public class AsteroidsGame extends Game {
                     if (thrusterCounter < 50) {
                         thrusterCounter++;
                         spaceShip.getThruster().setHeight(thrusterCounter);
+                        spaceShip.getThruster().addAction(Actions.alpha(thrusterCounter / 50F));
                         spaceShip.getThruster().setOrigin(spaceShip.getThruster().getWidth() - spaceShip.getWidth() / 2, spaceShip.getThruster().getHeight() + spaceShip.getHeight() / 2);
                     }
 
@@ -251,6 +277,7 @@ public class AsteroidsGame extends Game {
                 if (thrusterCounter > 0) {
                     thrusterCounter -= 1;
                     spaceShip.getThruster().setHeight(thrusterCounter);
+                    spaceShip.getThruster().addAction(Actions.alpha(thrusterCounter / 50F));
                     spaceShip.getThruster().setOrigin(spaceShip.getThruster().getWidth() - spaceShip.getWidth() / 2, spaceShip.getThruster().getHeight() + spaceShip.getHeight() / 2);
                     isThrusterOn = false;
 
@@ -295,6 +322,7 @@ public class AsteroidsGame extends Game {
                 listOfProjectiles.add(projectile);
 
             }
+
             if (Gdx.input.isKeyPressed(Input.Keys.B)) {
                 spaceShip.hit();
             }
@@ -325,6 +353,30 @@ public class AsteroidsGame extends Game {
                     timeWhenLastShot = System.currentTimeMillis();
                     projectileCounter++;
                 }
+
+            }
+        } else {
+            if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+                timeSinceStart = 0;
+                spaceShip.setHit(false);
+                spaceShip.setTexture(new Texture(Gdx.files.internal("spaceShip.png")));
+                spaceShip.getThruster().setVisible(true);
+                spaceShip.getThruster().setRotation(0);
+                playerScore = 0;
+                gameOverSign.setVisible(false);
+                pressEnterToPlayAgainSign.setVisible(false);
+                spaceShip.addAction(Actions.alpha(1F));
+                spaceShip.setPosition(mainStage.getWidth() / 2, mainStage.getHeight() / 2);
+                firstIndexScoreActor.setPosition(mainStage.getWidth() - firstIndexScoreActor.getWidth(), mainStage.getHeight() - firstIndexScoreActor.getHeight());
+                firstIndexScoreActor.addAction(Actions.alpha(1F));
+                secondIndexScoreActor.setPosition(firstIndexScoreActor.getX() - secondIndexScoreActor.getWidth() - secondIndexScoreActor.getWidth() / 3, mainStage.getHeight() - secondIndexScoreActor.getHeight());
+                secondIndexScoreActor.addAction(Actions.alpha(1F));
+                thirdIndexScoreActor.setPosition(secondIndexScoreActor.getX() - thirdIndexScoreActor.getWidth() - thirdIndexScoreActor.getWidth() / 3, mainStage.getHeight() - thirdIndexScoreActor.getHeight());
+                thirdIndexScoreActor.addAction(Actions.alpha(1F));
+                fourthIndexScoreActor.setPosition(thirdIndexScoreActor.getX() - fourthIndexScoreActor.getWidth() - fourthIndexScoreActor.getWidth() / 3, mainStage.getHeight() - fourthIndexScoreActor.getHeight());
+                fourthIndexScoreActor.addAction(Actions.alpha(1F));
+                fifthIndexScoreActor.setPosition(fourthIndexScoreActor.getX() - fifthIndexScoreActor.getWidth() - fifthIndexScoreActor.getWidth() / 3, mainStage.getHeight() - fifthIndexScoreActor.getHeight());
+                fifthIndexScoreActor.addAction(Actions.alpha(1F));
 
             }
         }
@@ -389,6 +441,11 @@ public class AsteroidsGame extends Game {
             if (enemyShip.isHit()) {
                 enemyShip.explode(explosionSound);
             }
+            if (spaceShip.isHit()) {
+                listOfExistingEnemyShips.remove(enemyShip);
+                enemyShip.getEnemyCanon().remove();
+                enemyShip.remove();
+            }
             distanceFromCanonX = (enemyShip.getX() + enemyShip.getWidth() / 2) - (spaceShip.getX() + spaceShip.getWidth() / 2);
             distanceFromCanonY = (enemyShip.getY() + enemyShip.getHeight() / 2) - (spaceShip.getY() + spaceShip.getHeight() / 2);
             canonAngle = (float) Math.toDegrees(Math.atan2(distanceFromCanonY, distanceFromCanonX)) + 90F;
@@ -398,6 +455,10 @@ public class AsteroidsGame extends Game {
 
         for (Asteroid asteroid : listOfExistingAsteroids) {
             asteroid.rotateBy(asteroid.velocityX / 100);
+            if (spaceShip.isHit()) {
+                listOfExistingAsteroids.remove(asteroid);
+                asteroid.remove();
+            }
         }
 
         for (BaseActor listOfProjectile : listOfProjectiles) {
@@ -414,16 +475,25 @@ public class AsteroidsGame extends Game {
         if (spaceShip.isHit()) {
             spaceShip.velocityX = 0;
             spaceShip.velocityY = 0;
-            spaceShip.getThruster().remove();
+            spaceShip.getThruster().setVisible(false);
             spaceShip.explode(explosionSound);
             thrusterSound.stop();
+
             gameOverSign.setVisible(true);
             gameOverSign.addAction(Actions.alpha((spaceShip.getTimeSinceHit()) / 4F));
+
             firstIndexScoreActor.setPosition(gameOverSign.getX() + gameOverSign.getWidth() - firstIndexScoreActor.getWidth(), gameOverSign.getY() - firstIndexScoreActor.getHeight() - firstIndexScoreActor.getHeight() / 2F);
             secondIndexScoreActor.setPosition(firstIndexScoreActor.getX() - secondIndexScoreActor.getWidth() - secondIndexScoreActor.getWidth() / 3, gameOverSign.getY() - secondIndexScoreActor.getHeight() - secondIndexScoreActor.getHeight() / 2F);
             thirdIndexScoreActor.setPosition(secondIndexScoreActor.getX() - thirdIndexScoreActor.getWidth() - thirdIndexScoreActor.getWidth() / 3, gameOverSign.getY() - thirdIndexScoreActor.getHeight() - thirdIndexScoreActor.getHeight() / 2F);
             fourthIndexScoreActor.setPosition(thirdIndexScoreActor.getX() - fourthIndexScoreActor.getWidth() - fourthIndexScoreActor.getWidth() / 3, gameOverSign.getY() - fourthIndexScoreActor.getHeight() - fourthIndexScoreActor.getHeight() / 2F);
             fifthIndexScoreActor.setPosition(fourthIndexScoreActor.getX() - fifthIndexScoreActor.getWidth() - fifthIndexScoreActor.getWidth() / 3, gameOverSign.getY() - fifthIndexScoreActor.getHeight() - fifthIndexScoreActor.getHeight() / 2F);
+
+
+            pressEnterToPlayAgainSign.setVisible(true);
+            pressEnterToPlayAgainSign.addAction(Actions.alpha((spaceShip.getTimeSinceHit()) % 1));
+            pressEnterToPlayAgainSign.setPosition((gameOverSign.getX() + (gameOverSign.getWidth() / 2)) - pressEnterToPlayAgainSign.getWidth() / 2, firstIndexScoreActor.getY() - firstIndexScoreActor.getHeight() * 2);
+            pressEnterToPlayAgainSign.setHeight(gameOverSign.getHeight() * 0.5F);
+            pressEnterToPlayAgainSign.setWidth(gameOverSign.getHeight() * 6F);
 
             firstIndexScoreActor.addAction(Actions.alpha((spaceShip.getTimeSinceHit()) / 4F));
             secondIndexScoreActor.addAction(Actions.alpha((spaceShip.getTimeSinceHit()) / 4F));
@@ -486,7 +556,7 @@ public class AsteroidsGame extends Game {
 
 
     public void generateAsteroids() {
-
+        timeSinceLastAsteroidGenerated = 0;
         float velocityX = rn.nextInt(100) + 25;
         float velocityY = rn.nextInt(100) + 25;
         float positionX = 0;

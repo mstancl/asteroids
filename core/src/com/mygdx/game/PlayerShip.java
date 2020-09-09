@@ -73,6 +73,14 @@ public class PlayerShip extends BaseActor {
         return hit;
     }
 
+    public void setHit(boolean bool) {
+        hit = bool;
+        if (!bool) {
+            timeSinceHit = 0;
+        }
+    }
+
+
     public float getTimeSinceHit() {
         return timeSinceHit;
     }
