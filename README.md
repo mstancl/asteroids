@@ -3,7 +3,7 @@ Asteroids game made using libGDX
 
 <b>To run,  download AsteroidsGame_jar.rar file, and execute the .jar file from the folder.</b>
 
-<h1> Controls </h1>  : 
+<h1> Controls </h1>  
 <br>
 Press UP arrow to accelerate the thrusters. 
 </br>
