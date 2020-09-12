@@ -101,7 +101,7 @@ public class EnemyShip extends BaseActor {
                 if (timeSinceHit < 2) {
                     this.setHeight(this.getHeight() + 1);
                     this.setWidth(this.getWidth() + 1);
-                    this.setPosition(getX()-0.5F, getY()-0.5F);
+                    this.setPosition(getX() - 0.5F, getY() - 0.5F);
                 }
             }
             explosionSound.setVolume(idOfExplosionSound, (2F - timeSinceHit) / 2F);

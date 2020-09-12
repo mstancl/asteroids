@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -58,7 +60,6 @@ public class AsteroidsGame extends Game {
 
     float timeSinceStart = 0F;
     float timeSinceLastAsteroidGenerated = 0F;
-    float timeSinceLastEnemyShipGenerated = 0F;
     float difficulty = 5.0F;
     long timeWhenLastShot;
     int thrusterCounter = 0;
@@ -237,7 +238,6 @@ public class AsteroidsGame extends Game {
     public void render() {
         timeSinceStart += Gdx.graphics.getDeltaTime();
         difficulty = Math.abs((timeSinceStart - 180F) / 30F);
-        System.out.println(difficulty);
         if (timeSinceStart > 3) {
             if (timeSinceLastAsteroidGenerated > difficulty) {
                 generateAsteroids();

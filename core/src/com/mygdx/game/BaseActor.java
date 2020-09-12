@@ -1,12 +1,12 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class BaseActor extends Actor {
     public TextureRegion region;
@@ -53,11 +53,11 @@ public class BaseActor extends Actor {
         }
     }
 
-    public void setDeltaCounter(long deltaCounter ){
+    public void setDeltaCounter(long deltaCounter) {
         this.deltaCounter = deltaCounter;
     }
 
-    public long getDeltaCounter(){
+    public long getDeltaCounter() {
         return deltaCounter;
     }
 
