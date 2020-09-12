@@ -9,10 +9,10 @@ import java.util.Random;
 
 public class EnemyShip extends BaseActor {
 
-    private BaseActor enemyCanon;
+    private final BaseActor enemyCanon;
     private boolean hit;
-    private float originalWidth;
-    private float originalHeight;
+    private final float originalWidth;
+    private final float originalHeight;
     private float timeSinceHit = 0;
     private long idOfExplosionSound;
 
